@@ -21,6 +21,7 @@ SOURCES += \
     src/mainwindow.cpp \
     src/qrscanform.cpp \
     src/scancardpage.cpp \
+    src/serialprocessor.cpp \
     src/soundtestpage.cpp \
     src/touchscreentest.cpp
 
@@ -29,6 +30,7 @@ HEADERS += \
     src/mainwindow.h \
     src/qrscanform.h \
     src/scancardpage.h \
+    src/serialprocessor.h \
     src/soundtestpage.h \
     src/touchscreentest.h
 

@@ -80,7 +80,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ter1">
+  <widget class="QPushButton" name="sendHexBut">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -132,7 +132,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ter5">
+  <widget class="QPushButton" name="refreshBut">
    <property name="geometry">
     <rect>
      <x>10</x>
