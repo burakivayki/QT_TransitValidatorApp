@@ -31,7 +31,7 @@ private slots:
     void on_getInfBut_clicked();
     void readSerialData();
     void on_ter1_clicked();
-    void on_ter5_clicked();
+    void on_refreshBut_clicked();
 
 private:
 

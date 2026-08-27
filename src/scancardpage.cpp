@@ -15,7 +15,7 @@ void ScanCardPage::cardPageUI(){
     ui->ter2->setText("---");
     ui->ter3->setText("---");
     ui->ter4->setText("---");
-    ui->ter5->setText("Refresh the terminal");
+    ui->refreshBut->setText("Refresh the terminal");
     ui->statusLabel->setText("");ui->statusLabel->setStyleSheet("color:black");
 
 }
@@ -186,7 +186,7 @@ void ScanCardPage::readSerialData(){
     }
 }
 
-void ScanCardPage::on_ter5_clicked(){
+void ScanCardPage::on_refreshBut_clicked(){
     ui->terminalBrowser->setText("");
 }
 
