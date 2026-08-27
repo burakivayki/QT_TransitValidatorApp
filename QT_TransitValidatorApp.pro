@@ -1,7 +1,7 @@
 QT       += core gui
 QT += serialport
 QT += core
-audio_files.files = $$PWD/akbil.mp3 $$PWD/akbil.wav
+audio_files.files = $$PWD/assets/akbil.mp3 $$PWD/assets/akbil.wav
 audio_files.path = /home/root
 INSTALLS += audio_files
 
@@ -44,3 +44,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    rsc.qrc

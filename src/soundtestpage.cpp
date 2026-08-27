@@ -78,11 +78,11 @@ void SoundTestPage::on_soundStart_clicked()
     QString format = "";
     if(ui->radioButton->isChecked()){
         format = ".mp3";
-        system("mpg123 -q ./akbil.mp3 &");
+        system("mpg123 -q ./assets/akbil.mp3 &");
     }
     else if (ui->radioButton2->isChecked()){
         format = ".wav";
-        system("aplay ./akbil.wav &");
+        system("aplay ./assets/akbil.wav &");
     }
     ui->soundTestStatus->setText("The "+ format +" audio file is playing right now...");
 

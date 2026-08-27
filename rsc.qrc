@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/akbil.wav</file>
+        <file>assets/akbil.mp3</file>
+    </qresource>
+</RCC>
