@@ -16,29 +16,29 @@ TARGET = QT_TransitValidatorApp
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    main.cpp \
-    mainpage.cpp \
-    mainwindow.cpp \
-    qrscanform.cpp \
-    scancardpage.cpp \
-    soundtestpage.cpp \
-    touchscreentest.cpp
+    src/main.cpp \
+    src/mainpage.cpp \
+    src/mainwindow.cpp \
+    src/qrscanform.cpp \
+    src/scancardpage.cpp \
+    src/soundtestpage.cpp \
+    src/touchscreentest.cpp
 
 HEADERS += \
-    mainpage.h \
-    mainwindow.h \
-    qrscanform.h \
-    scancardpage.h \
-    soundtestpage.h \
-    touchscreentest.h
+    src/mainpage.h \
+    src/mainwindow.h \
+    src/qrscanform.h \
+    src/scancardpage.h \
+    src/soundtestpage.h \
+    src/touchscreentest.h
 
 FORMS += \
-    mainpage.ui \
-    mainwindow.ui \
-    qrscanform.ui \
-    scancardpage.ui \
-    soundtestpage.ui \
-    touchscreentest.ui
+    ui/mainpage.ui \
+    ui/mainwindow.ui \
+    ui/qrscanform.ui \
+    ui/scancardpage.ui \
+    ui/soundtestpage.ui \
+    ui/touchscreentest.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
