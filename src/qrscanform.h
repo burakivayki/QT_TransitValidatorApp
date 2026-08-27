@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QSerialPort>
 
+#define SERIAL_QR_PORT "/dev/ttymxc4"
+#define BAUD_RATE 115200
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class QrScanForm;}
 QT_END_NAMESPACE

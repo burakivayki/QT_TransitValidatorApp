@@ -17,7 +17,6 @@ MainPage::MainPage(QWidget *parent) :
 
 MainPage::~MainPage()
 {
-
     delete ui;
 }
 
@@ -33,7 +32,7 @@ void MainPage::on_exitAppBut_clicked()
 
 void MainPage::on_qrWidgetBut_clicked()
 {
-    emit openQrScanner(); //sadece sinyal gönderir, kendisi işlemi yapmaz
+    emit openQrScanner();
 }
 
 void MainPage::on_soundWidgetBut_clicked()

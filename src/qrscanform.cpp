@@ -5,8 +5,8 @@
 void QrScanForm::qrUI(){
     this->setWindowTitle("QR Scanner");
     serialPort = new QSerialPort(this); //seri port nesnesi
-    serialPort->setPortName("/dev/ttymxc4"); //cihazın adresi
-    serialPort->setBaudRate(QSerialPort::Baud115200); //hızı
+    serialPort->setPortName(SERIAL_QR_PORT); //cihazın adresi
+    serialPort->setBaudRate(BAUD_RATE); //hızı
     ui->exitButton->setText("Return to the main page");
     ui->qrOutputLabel->setText("---");
     ui->qrOutputLabel_2->setText("Please show QR to the scanner...");

@@ -16,16 +16,23 @@ public:
     ~MainPage();
 
 signals:
-    void openQrScanner(); // Qr okuyucuyu açma talebi sinyali
+    void openQrScanner();
+
     void openSoundTest();
+
     void openTouchScreenTest();
+
     void openScanCardPage();
 
 private slots:
     void on_exitAppBut_clicked();
+
     void on_qrWidgetBut_clicked();
+
     void on_soundWidgetBut_clicked();
+
     void on_tScreenWidgetBut_clicked();
+
     void on_scanCardBut_clicked();
 
 private:

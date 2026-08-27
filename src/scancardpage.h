@@ -5,8 +5,13 @@
 #include <QSerialPort>
 #include "serialprocessor.h"
 
-#define READER_STX_1 0x02
-#define READER_STX_2 0x00
+#define SERIAL_READER_PORT "/dev/ttymxc3"
+#define BAUD_RATE_INT 921600
+#define BAUD_RATE_STR "921600"
+#define PROGRAM_COMMAND "lpccmd"
+#define ARGUEMENT_1 "-b"
+#define ARGUEMENT_2 "--getinf"
+#define HEX_STRING "02 09 00 3D DF 0C 00 E5 03"
 
 namespace Ui{
 class ScanCardPage;
@@ -29,20 +34,28 @@ signals:
 private slots:
 
     void on_exitButton_clicked();
+
     void on_getInfBut_clicked();
+
     void readSerialData();
+
     void on_sendHexBut_clicked();
+
     void on_refreshBut_clicked();
+
     void appendToTerminal(const QString &message);
 
 private:
 
     Ui::ScanCardPage*ui;
-    QSerialPort*serialPort;
-    QByteArray buffer;
-    QByteArray rec_buffer;
-    SerialProcessor *processor;
 
+    QSerialPort*serialPort;
+
+    QByteArray buffer;
+
+    QByteArray rec_buffer;
+
+    SerialProcessor *processor;
 };
 
 #endif//SCANCARDPAGE_H

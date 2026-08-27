@@ -28,8 +28,8 @@ ScanCardPage::ScanCardPage(QWidget*parent):
     connect(processor, &SerialProcessor::messageReady, this, &ScanCardPage::appendToTerminal);
 
     serialPort = new QSerialPort(this);
-    serialPort->setPortName("/dev/ttymxc3");
-    serialPort->setBaudRate(921600);
+    serialPort->setPortName(SERIAL_READER_PORT);
+    serialPort->setBaudRate(BAUD_RATE_INT);
 
     if(serialPort->open(QIODevice::ReadWrite)){
         connect(serialPort, &QSerialPort::readyRead, this, &ScanCardPage::readSerialData);
@@ -58,9 +58,9 @@ void ScanCardPage::on_getInfBut_clicked(){
 
     ui->terminalBrowser->setText("");
     QProcess process;
-    QString program="lpccmd";
+    QString program = PROGRAM_COMMAND;
     QStringList arguments;
-    arguments<<"-b"<<"921600"<<"--getinf"<<"/dev/ttymxc3";
+    arguments << ARGUEMENT_1 << BAUD_RATE_STR << ARGUEMENT_2 << SERIAL_READER_PORT;
 
     process.start(program,arguments);
     if(!process.waitForStarted(2000)){
@@ -92,7 +92,7 @@ void ScanCardPage::on_getInfBut_clicked(){
 void ScanCardPage::on_sendHexBut_clicked(){
 
     ui->terminalBrowser->setText("");
-    QString hexString="02 09 00 3D DF 0C 00 E5 03";
+    QString hexString = HEX_STRING;
     QByteArray dataToSend=QByteArray::fromHex(hexString.toUtf8());
 
     if(serialPort->isOpen() && serialPort->isWritable()){
