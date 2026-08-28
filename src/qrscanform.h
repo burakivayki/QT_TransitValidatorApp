@@ -7,7 +7,6 @@
 #define SERIAL_QR_PORT "/dev/ttymxc4"
 #define BAUD_RATE 115200
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class QrScanForm;}
 QT_END_NAMESPACE
@@ -19,20 +18,21 @@ class QrScanForm : public QWidget
 public:
     explicit QrScanForm(QWidget *parent = nullptr);
     ~QrScanForm();
+
     void qrUI();
 
 signals:
     void returnToMainPage();
 
 private slots:
-    void readQrData(); //Seri porta veri geldiğinde tetiklenecek fonksiyon
+    void readQrData();
 
     void on_exitButton_clicked();
 
 private:
     Ui::QrScanForm *ui;
-    QSerialPort *serialPort; // Haberleşme nesnesi
-    QByteArray buffer;       // Gelen veriyi biriktireceğimiz alan
+    QSerialPort *serialPort;
+    QByteArray buffer;
 };
 
 #endif // QRSCANFORM_H

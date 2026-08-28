@@ -7,12 +7,14 @@ MainPage::MainPage(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Main Page");
+    ui->appName->setText("Application");
     ui->exitAppBut->setText("Exit");
     ui->qrWidgetBut->setText("Scan QR");
     ui->soundWidgetBut->setText("Sound Test");
     ui->tScreenWidgetBut->setText("Touch Screen Test");
     ui->scanCardBut->setText("Scan a Card");
-    ui->appName->setText("Application");
+    ui->button1->setText("Coming soon...");
+    ui->button2->setText("Coming soon...");
 }
 
 MainPage::~MainPage()

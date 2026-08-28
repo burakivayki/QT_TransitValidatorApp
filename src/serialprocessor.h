@@ -11,6 +11,7 @@
 #define READER_LEN_2 0x81
 #define READER_LEN_3 0x82
 #define READER_ETX_1 0x03
+
 class SerialProcessor : public QObject {
     Q_OBJECT
 

@@ -10,7 +10,6 @@
 #define COMMAND_1 "mpg123 -q ./"
 #define COMMAND_2 "aplay ./"
 
-
 namespace Ui {
 class SoundTestPage;
 }
@@ -23,6 +22,7 @@ public:
     explicit SoundTestPage(QWidget *parent = nullptr);
     ~SoundTestPage();
     QTimer *timer;
+
     void soundTestUI();
 
 signals:

@@ -82,7 +82,7 @@ void ScanCardPage::on_getInfBut_clicked(){
     }
 
     if(combinedOutput.isEmpty()){
-        combinedOutput="Command has been runned but could not get any output.Output code:(ExitCode):"
+        combinedOutput="Command has been runned but could not get any output. Output code:(ExitCode):"
                         + QString::number(process.exitCode());
     }
 
@@ -97,7 +97,7 @@ void ScanCardPage::on_sendHexBut_clicked(){
 
     if(serialPort->isOpen() && serialPort->isWritable()){
         serialPort->write(dataToSend);
-        ui->terminalBrowser->append("Sent: "+dataToSend.toHex(' ').toUpper());
+        ui->terminalBrowser->append("Sent: " + dataToSend.toHex(' ').toUpper() + "\n");
     }
     else{
         ui->terminalBrowser->append("Error: The port is closed or unwritable.");

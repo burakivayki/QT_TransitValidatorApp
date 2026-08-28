@@ -55,10 +55,10 @@
   <widget class="QTextBrowser" name="terminalBrowser">
    <property name="geometry">
     <rect>
-     <x>245</x>
+     <x>215</x>
      <y>70</y>
-     <width>331</width>
-     <height>471</height>
+     <width>361</width>
+     <height>531</height>
     </rect>
    </property>
    <property name="font">
@@ -70,10 +70,10 @@
   <widget class="QPushButton" name="getInfBut">
    <property name="geometry">
     <rect>
-     <x>8</x>
+     <x>10</x>
      <y>70</y>
-     <width>231</width>
-     <height>71</height>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -84,9 +84,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>150</y>
-     <width>231</width>
-     <height>71</height>
+     <y>160</y>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -97,9 +97,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>230</y>
-     <width>231</width>
-     <height>71</height>
+     <y>250</y>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -110,9 +110,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>310</y>
-     <width>231</width>
-     <height>71</height>
+     <y>340</y>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -123,9 +123,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>390</y>
-     <width>231</width>
-     <height>71</height>
+     <y>430</y>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -136,9 +136,9 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>470</y>
-     <width>231</width>
-     <height>71</height>
+     <y>520</y>
+     <width>201</width>
+     <height>81</height>
     </rect>
    </property>
    <property name="text">
@@ -149,7 +149,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>550</y>
+     <y>610</y>
      <width>561</width>
      <height>31</height>
     </rect>
@@ -162,7 +162,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>580</y>
+     <y>640</y>
      <width>561</width>
      <height>31</height>
     </rect>
