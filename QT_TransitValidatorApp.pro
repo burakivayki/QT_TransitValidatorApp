@@ -19,6 +19,7 @@ SOURCES += \
     src/main.cpp \
     src/mainpage.cpp \
     src/mainwindow.cpp \
+    src/packetgenerator.cpp \
     src/qrscanform.cpp \
     src/scancardpage.cpp \
     src/serialprocessor.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 HEADERS += \
     src/mainpage.h \
     src/mainwindow.h \
+    src/packetgenerator.h \
     src/qrscanform.h \
     src/scancardpage.h \
     src/serialprocessor.h \

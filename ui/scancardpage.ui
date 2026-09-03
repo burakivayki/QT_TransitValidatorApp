@@ -93,7 +93,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="ter2">
+  <widget class="QPushButton" name="createPackBut">
    <property name="geometry">
     <rect>
      <x>10</x>

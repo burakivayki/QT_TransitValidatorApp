@@ -45,6 +45,8 @@ private slots:
 
     void appendToTerminal(const QString &message);
 
+    void on_createPackBut_clicked();
+
 private:
 
     Ui::ScanCardPage*ui;

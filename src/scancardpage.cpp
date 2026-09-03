@@ -12,7 +12,7 @@ void ScanCardPage::cardPageUI(){
     ui->exitButton->setText("Return to the main page");
     ui->getInfBut->setText("GetInf Command");
     ui->sendHexBut->setText("Send HEX");
-    ui->ter2->setText("---");
+    ui->createPackBut->setText("Create a Packet");
     ui->ter3->setText("---");
     ui->ter4->setText("---");
     ui->refreshBut->setText("Refresh the terminal");
@@ -117,4 +117,8 @@ void ScanCardPage::on_refreshBut_clicked(){
 }
 
 
+void ScanCardPage::on_createPackBut_clicked()
+{
+
+}
 
