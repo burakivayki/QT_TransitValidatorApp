@@ -22,7 +22,7 @@ class ScanCardPage : public QWidget
     Q_OBJECT
 
 public:
-    explicit ScanCardPage(QWidget *parent = nullptr);
+    explicit ScanCardPage(QWidget *parent = nullptr); //ÇĞREN
     ~ScanCardPage();
 
     void cardPageUI();

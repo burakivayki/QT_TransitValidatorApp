@@ -19,7 +19,7 @@ void ScanCardPage::cardPageUI(){
     ui->statusLabel->setText("");ui->statusLabel->setStyleSheet("color:black");
 }
 
-ScanCardPage::ScanCardPage(QWidget*parent):
+ScanCardPage::ScanCardPage(QWidget*parent): //BU FONKSIYON NASI ÇALIŞTI
     QWidget(parent),ui(new Ui::ScanCardPage){
 
     ui->setupUi(this);
@@ -89,7 +89,7 @@ void ScanCardPage::on_getInfBut_clicked(){
     ui->terminalBrowser->setText(combinedOutput);
 }
 
-void ScanCardPage::on_sendHexBut_clicked(){
+void ScanCardPage::on_sendHexBut_clicked(){ //READER'A AL BURAYI
 
     ui->terminalBrowser->setText("");
     QString hexString = HEX_STRING;
@@ -104,7 +104,7 @@ void ScanCardPage::on_sendHexBut_clicked(){
     }
 }
 
-void ScanCardPage::readSerialData(){
+void ScanCardPage::readSerialData(){ //READER'A AL - SERI PORTUN TAMAMINI
     processor->processData(serialPort->readAll());
 }
 

@@ -26,6 +26,10 @@ signals:
 
 private:
     QByteArray rec_buffer;
-};
 
+    bool findSTX();
+    int findLEN(quint32 &packetLength, int &lenSize);
+    void mapFields(quint32 packetLength, int lenSize, quint8 &stx, quint8 &pcb, quint8 &ins, quint8 &calcLRC, quint8 &receivedLRC, quint8 &etx, QByteArray &dataField);
+    void sendMessage(quint32 packetLength, int lenSize, quint8 stx, quint8 pcb, quint8 ins, quint8 calcLRC, quint8 receivedLRC, quint8 etx, QByteArray dataField);
+};
 #endif // SERIALPROCESSOR_H
