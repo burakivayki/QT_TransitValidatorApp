@@ -145,7 +145,7 @@
     <string>PushButton</string>
    </property>
   </widget>
-  <widget class="QLabel" name="statusLabel">
+  <widget class="QLabel" name="hexLabel">
    <property name="geometry">
     <rect>
      <x>10</x>

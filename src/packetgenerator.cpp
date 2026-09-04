@@ -13,7 +13,7 @@ QByteArray PacketGenerator::createPacket(quint8 ins, const QByteArray &data) {
         lenSize = 1;
         pktLen = baseSize + lenSize + dataSize;
     } else if (baseSize + 2 + dataSize < 0x100){
-        lenSize = 1;
+        lenSize = 2;
         pktLen = baseSize + lenSize + dataSize;
     } else {
         lenSize = 3;
@@ -24,16 +24,16 @@ QByteArray PacketGenerator::createPacket(quint8 ins, const QByteArray &data) {
     if (lenSize == 1){
         packet.append(static_cast<char>(pktLen));
     } else if (lenSize == 2){
-        packet.append(static_cast<char>(0x81);
-        packet.append(static_cast<char>(pktLen);
+        packet.append(static_cast<char>(0x81));
+        packet.append(static_cast<char>(pktLen));
     } else if (lenSize == 3){
-        packet.append(static_cast<char>(0x82);
+        packet.append(static_cast<char>(0x82));
         packet.append(static_cast<char>((pktLen >> 8) & 0xFF));
-        packet.append(static_cast<char>(pktLen & 0x0FF);
+        packet.append(static_cast<char>(pktLen & 0x0FF));
     }
 
-    packet.append(static_cast<char>(0x00);
-    packet.append(static_cast<char>(ins);
+    packet.append(static_cast<char>(0x00));
+    packet.append(static_cast<char>(ins));
 
     if (!data.isEmpty()){
         packet.append(data);
@@ -43,8 +43,8 @@ QByteArray PacketGenerator::createPacket(quint8 ins, const QByteArray &data) {
     for (int i = 0; i < packet.size(); ++i){
         lrc ^= static_cast<quint8>(packet[i]);
     }
-    packet.append(static_cast<char>(0x82);
-    packet.append(static_cast<char>(0x82);
+    packet.append(static_cast<char>(lrc));
+    packet.append(static_cast<char>(0x03));
 
     return packet;
 }

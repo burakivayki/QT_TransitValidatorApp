@@ -1,5 +1,6 @@
 #include "scancardpage.h"
 #include "ui_scancardpage.h"
+#include "packetgenerator.h"
 
 #include <QProcess>
 #include <QString>
@@ -16,7 +17,7 @@ void ScanCardPage::cardPageUI(){
     ui->ter3->setText("---");
     ui->ter4->setText("---");
     ui->refreshBut->setText("Refresh the terminal");
-    ui->statusLabel->setText("");ui->statusLabel->setStyleSheet("color:black");
+    ui->hexLabel->setText(""); ui->hexLabel->setStyleSheet("color:black");
 }
 
 ScanCardPage::ScanCardPage(QWidget*parent): //BU FONKSIYON NASI ÇALIŞTI
@@ -119,6 +120,11 @@ void ScanCardPage::on_refreshBut_clicked(){
 
 void ScanCardPage::on_createPackBut_clicked()
 {
+    quint8 insCode = 0x10; //gönderilmek istenen ins değeri
+    QByteArray sentData = QByteArray::fromHex("AA BB CC"); //gönderilmek istenen data
 
+    QByteArray createdPacket = PacketGenerator::createPacket(insCode, sentData);
+    QString hexOutput = QString(createdPacket.toHex(' ').toUpper());
+    ui->hexLabel->setText("Created Packet: " + hexOutput);
 }
 

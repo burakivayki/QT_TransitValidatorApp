@@ -1,15 +1,11 @@
 #ifndef PACKETGENERATOR_H
 #define PACKETGENERATOR_H
 
-#include <QObject>
 #include <QByteArray>
-#include <QString>
 
-class SerialProcessor : public QObject {
-    Q_OBJECT
+class PacketGenerator {
 public:
-    static QByteArray createPacket(quint8 ins, const &data);
-
+    static QByteArray createPacket(quint8 ins, const QByteArray &data = QByteArray());
 };
 
 #endif // PACKETGENERATOR_H
