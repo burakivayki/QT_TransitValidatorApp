@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
     //qputenv("QT_QPA_LINUXFB_ROTATION", "90"); //LinuxFB
     qputenv("QT_QPA_EVDEV_TOUCHSCREEN_PARAMETERS", "rotate=90"); //dokunmatik ekran da kayarsa kullan
 
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

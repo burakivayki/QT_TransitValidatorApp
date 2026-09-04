@@ -1,5 +1,7 @@
 #include "mainpage.h"
 #include "ui_mainpage.h"
+#include <QProcess>
+#include <QDebug>
 
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
@@ -7,6 +9,17 @@ MainPage::MainPage(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("Main Page");
+
+    QProcess process;
+    process.start("hostname", QStringList() << "-I");
+    process.waitForFinished();
+
+    QString output = process.readAllStandardOutput();
+    QString ip = output.split(" ").first().trimmed();
+    ui->ipLabel->setText(ip);
+
+    qDebug() << "Terminal Ciktisi:" << ip; // Çıktının gelip gelmediğini konsoldan kontrol edin
+
     ui->appName->setText("Application");
     ui->exitAppBut->setText("Exit");
     ui->qrWidgetBut->setText("Scan QR");
