@@ -1,10 +1,12 @@
 #include "scancardpage.h"
 #include "ui_scancardpage.h"
 #include "packetgenerator.h"
+#include <QRandomGenerator>
 
 #include <QProcess>
 #include <QString>
 #include <QStringList>
+#include <QDebug>
 
 void ScanCardPage::cardPageUI(){
     this->setWindowTitle("ScanCard");
@@ -12,8 +14,8 @@ void ScanCardPage::cardPageUI(){
     ui->terminalBrowser->setText("");
     ui->exitButton->setText("Return to the main page");
     ui->getInfBut->setText("GetInf Command");
-    ui->sendHexBut->setText("Send HEX");
-    ui->createPackBut->setText("Create a Packet");
+    ui->ter1->setText("---");
+    ui->ter2->setText("---");
     ui->ter3->setText("---");
     ui->ter4->setText("---");
     ui->refreshBut->setText("Refresh the terminal");
@@ -36,11 +38,65 @@ ScanCardPage::ScanCardPage(QWidget*parent): //BU FONKSIYON NASI ÇALIŞTI
         connect(serialPort, &QSerialPort::readyRead, this, &ScanCardPage::readSerialData);
         ui->outputLabel->setText("Connected to port succesfully.");
         ui->outputLabel->setStyleSheet("color:green;");
-    }
-    else{
+    } else{
         ui->outputLabel->setText("Could not connect to port:"+serialPort->errorString());
         ui->outputLabel->setStyleSheet("color:red;");
     }
+}
+
+void ScanCardPage::buildAndSendPacket(PacketCommandType cmdType){
+    ui->terminalBrowser->setText("");
+    quint8 stx = STX_VALUE;
+    quint8 etx = ETX_VALUE;
+    quint8 pcb = PCB_VALUE;
+
+    quint8 ins = 0;
+    quint16 tag = 0;
+    QByteArray value;
+
+    switch(cmdType){
+        case PacketCommandType::GetInfo:
+            ins = 0x3D;
+            tag = 0xDF0C;
+            //VALUE BOŞ
+            break;
+    }
+
+    quint8 len = static_cast<quint8>(value.size());
+
+    PacketGenerator generator;
+    currentPacketToSend = generator.createPacket(stx, pcb, ins, etx, tag, len, value);
+
+    QString packetText = currentPacketToSend.toHex(' ').toUpper();
+
+    if (serialPort->isOpen() && serialPort->isWritable()){
+        serialPort->write(currentPacketToSend);
+        ui->terminalBrowser->append("Sent packet: " + packetText + "\n");
+    } else {
+        ui->terminalBrowser->append("Error: The port is closed or unwritable");
+    }
+}
+
+void ScanCardPage::readSerialData(){ //READER'A AL - SERI PORTUN TAMAMINI
+    processor->processData(serialPort->readAll());
+}
+
+void ScanCardPage::on_refreshBut_clicked(){
+    ui->terminalBrowser->setText("");
+    ui->hexLabel->setText("");
+}
+
+void ScanCardPage::on_getInfBut_clicked()
+{
+    buildAndSendPacket(PacketCommandType::GetInfo);
+}
+
+void ScanCardPage::appendToTerminal(const QString &message){
+    ui->terminalBrowser->append(message);
+}
+
+void ScanCardPage::on_exitButton_clicked(){
+    emit returnToMainPage();
 }
 
 ScanCardPage::~ScanCardPage(){
@@ -50,81 +106,3 @@ ScanCardPage::~ScanCardPage(){
     }
     delete ui;
 }
-
-void ScanCardPage::on_exitButton_clicked(){
-    emit returnToMainPage();
-}
-
-void ScanCardPage::on_getInfBut_clicked(){
-
-    ui->terminalBrowser->setText("");
-    QProcess process;
-    QString program = PROGRAM_COMMAND;
-    QStringList arguments;
-    arguments << ARGUEMENT_1 << BAUD_RATE_STR << ARGUEMENT_2 << SERIAL_READER_PORT;
-
-    process.start(program,arguments);
-    if(!process.waitForStarted(2000)){
-        ui->terminalBrowser->setText("Terminal Error: "+process.errorString());
-        return;
-    }
-
-    process.waitForFinished(3000);
-    QString output=process.readAllStandardOutput();
-    QString errorOutput=process.readAllStandardError();
-    QString combinedOutput;
-
-    if(!output.isEmpty()){
-        combinedOutput+="(ExpectedOutput):\n"+output+"\n";
-    }
-
-    if(!errorOutput.isEmpty()){
-        combinedOutput+="(ErrorOutput):\n"+errorOutput+"\n";
-    }
-
-    if(combinedOutput.isEmpty()){
-        combinedOutput="Command has been runned but could not get any output. Output code:(ExitCode):"
-                        + QString::number(process.exitCode());
-    }
-
-    ui->terminalBrowser->setText(combinedOutput);
-}
-
-void ScanCardPage::on_sendHexBut_clicked(){ //READER'A AL BURAYI
-
-    ui->terminalBrowser->setText("");
-    QString hexString = HEX_STRING;
-    QByteArray dataToSend=QByteArray::fromHex(hexString.toUtf8());
-
-    if(serialPort->isOpen() && serialPort->isWritable()){
-        serialPort->write(dataToSend);
-        ui->terminalBrowser->append("Sent: " + dataToSend.toHex(' ').toUpper() + "\n");
-    }
-    else{
-        ui->terminalBrowser->append("Error: The port is closed or unwritable.");
-    }
-}
-
-void ScanCardPage::readSerialData(){ //READER'A AL - SERI PORTUN TAMAMINI
-    processor->processData(serialPort->readAll());
-}
-
-void ScanCardPage::appendToTerminal(const QString &message){
-    ui->terminalBrowser->append(message);
-}
-
-void ScanCardPage::on_refreshBut_clicked(){
-    ui->terminalBrowser->setText("");
-}
-
-
-void ScanCardPage::on_createPackBut_clicked()
-{
-    quint8 insCode = 0x10; //gönderilmek istenen ins değeri
-    QByteArray sentData = QByteArray::fromHex("AA BB CC"); //gönderilmek istenen data
-
-    QByteArray createdPacket = PacketGenerator::createPacket(insCode, sentData);
-    QString hexOutput = QString(createdPacket.toHex(' ').toUpper());
-    ui->hexLabel->setText("Created Packet: " + hexOutput);
-}
-

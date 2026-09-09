@@ -2,6 +2,7 @@
 #include "ui_mainpage.h"
 #include <QProcess>
 #include <QDebug>
+#include <QString>
 
 MainPage::MainPage(QWidget *parent) :
     QWidget(parent),
@@ -11,14 +12,32 @@ MainPage::MainPage(QWidget *parent) :
     this->setWindowTitle("Main Page");
 
     QProcess process;
-    process.start("hostname", QStringList() << "-I");
+    process.start("ifconfig", QStringList() << "eth0");
     process.waitForFinished();
 
     QString output = process.readAllStandardOutput();
-    QString ip = output.split(" ").first().trimmed();
-    ui->ipLabel->setText(ip);
+    QString errorOutput = process.readAllStandardError();
 
-    qDebug() << "Terminal Ciktisi:" << ip; // Çıktının gelip gelmediğini konsoldan kontrol edin
+    if (!errorOutput.isEmpty()) {
+        qDebug() << "Terminal Error:" << errorOutput;
+    }
+    qDebug() << "Terminal Output:" << output;
+
+    QString ipAddress = "IP address of this device could not find";
+    int startIndex = output.indexOf("inet addr:");
+
+    if (startIndex != -1) {
+        startIndex += 10;                               //"inet addr:" kısmını (10 karakter) atlayıp IP'nin başına geldi
+        int endIndex = output.indexOf(' ', startIndex); //IP'den sonraki ilk boşluk
+
+        if (endIndex != -1) {
+            ipAddress = output.mid(startIndex, endIndex - startIndex);
+        } else {
+            // Eğer IP string'in en sonundaysa ve boşluk yoksa
+            ipAddress = output.mid(startIndex);
+        }
+    }
+    ui->ipLabel->setText("IP: " + ipAddress);
 
     ui->appName->setText("Application");
     ui->exitAppBut->setText("Exit");
