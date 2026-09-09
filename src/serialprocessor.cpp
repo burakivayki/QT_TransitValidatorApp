@@ -102,6 +102,53 @@ void SerialProcessor::mapFields(quint32 packetLength, int lenSize, quint8 &stx, 
         }
     }
 }
+
+QString SerialProcessor::decodeDataField(const QByteArray &dataField){
+    QString parsedOutput = "";
+    if (dataField.size() < 3) return parsedOutput; //2 byte tag + 1 byte len
+
+    int index = 0;
+
+    if (static_cast<quint8>(dataField[index]) == 0xFF && static_cast<quint8>(dataField[index+1]) == 0x01) {
+        // index 0: FF, index 1: 01, index 2: 2A (Uzunluk)
+        index += 3;
+    }
+
+    if (index + 2 > dataField.size()) return parsedOutput;
+
+    quint16 tag = (static_cast<quint8>(dataField[index]) << 8) | static_cast<quint8>(dataField[index + 1]);
+    index += 2;
+
+    quint8 len = static_cast<quint8>(dataField[index]);
+    index += 1;
+
+    switch (tag){
+        case 0x0DF0C:{ //getinf -> 4 UID + 4FW + UTC + 27 RFU
+            if (dataField.size() - index >= 39){
+                QByteArray uid = dataField.mid(index, 4);
+                quint8 fwMajor = static_cast<quint8>(dataField[index + 4]);
+                quint8 fwMinor = static_cast<quint8>(dataField[index + 5]);
+                quint8 fwBugfix = static_cast<quint8>(dataField[index + 6]);
+                quint8 fwBuildNo = static_cast<quint8>(dataField[index + 7]);
+                QByteArray utc = dataField.mid(index + 8, 4);
+
+                parsedOutput += "\n[Parsed DATA - GET INF]\n";
+                parsedOutput += "UID: " + uid.toHex(' ').toUpper() + "\n";
+                parsedOutput += QString("FW_VER: %1.%2.%3.%4\n").arg(fwMajor).arg(fwMinor).arg(fwBugfix).arg(fwBuildNo);
+                parsedOutput += "UTC: " + utc.toHex(' ').toUpper() + "\n";
+            } else {
+                parsedOutput += "\n[Error] Hatalı GET INF uzunluğu.\n";
+            }
+            break;
+        }
+    default:
+        parsedOutput += QString("\n[Unknown TAG] %1\n").arg(tag, 4, 16, QChar('0')).toUpper();
+        break;
+    }
+    return parsedOutput;
+}
+
+
 void SerialProcessor::sendMessage(quint32 packetLength, int lenSize, quint8 stx, quint8 pcb, quint8 ins, quint8 calcLRC, quint8 receivedLRC, quint8 etx, QByteArray dataField) {
     bool isValid = true;
 
@@ -135,6 +182,9 @@ void SerialProcessor::sendMessage(quint32 packetLength, int lenSize, quint8 stx,
         .arg(QString(dataField.toHex(' ').toUpper()))
         .arg(QString::number(receivedLRC, 16).toUpper().rightJustified(2, '0'))
         .arg(QString::number(etx, 16).toUpper().rightJustified(2, '0'));
+
+        //DATA AYIRACI
+        output += decodeDataField(dataField);
 
         emit messageReady(output);
     }
