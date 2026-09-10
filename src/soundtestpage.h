@@ -22,34 +22,24 @@ public:
     explicit SoundTestPage(QWidget *parent = nullptr);
     ~SoundTestPage();
     QTimer *timer;
-
     void soundTestUI();
 
 signals:
     void returnToMainPage();
-
     void yesClicked();
-
     void noClicked();
 
 private slots:
     void on_exitButton_clicked();
-
     void on_soundStart_clicked();
-
     void on_radioButton_clicked();
-
     void on_radioButton2_clicked();
-
     void on_yesBut_clicked();
-
     void on_noBut_clicked();
-
     void on_velocitySlider_valueChanged(int value);
 
 private:
     Ui::SoundTestPage *ui;
-
     void refreshRadioButs();
 };
 

@@ -68,7 +68,6 @@ int SerialProcessor::findLEN(quint32 &packetLength, int &lenSize) {
         rec_buffer.remove(0,1);
         return 2;
     }
-
     if (rec_buffer.size() < (int)packetLength) return 1;
 
     return 0;

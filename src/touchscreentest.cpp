@@ -21,10 +21,9 @@ void TouchScreenTest::tScreenUI(){
     ui->test8->setDisabled(true); ui->test8->setText("8"); ui->test8->setStyleSheet("");
 }
 
-TouchScreenTest::TouchScreenTest(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TouchScreenTest)
-{
+TouchScreenTest::TouchScreenTest(QWidget *parent):QWidget(parent),
+    ui(new Ui::TouchScreenTest) {
+
     ui->setupUi(this);
 
     touchButtons = {ui->test1, ui->test2, ui->test3, ui->test4,
@@ -58,6 +57,7 @@ void TouchScreenTest::startTouchTest(){
     touchButtons[0]->setStyleSheet("background-color: red; color: white;");
     ui->statusLabel->setText("Test has started. Please tap 1. button.");
 }
+
 void TouchScreenTest::handleTouchButtons(){
     QPushButton* clickedBtn = qobject_cast<QPushButton*>(sender());
 

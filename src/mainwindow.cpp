@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
     TouchScreenTest *tsPage = new TouchScreenTest(this);
     ScanCardPage *cardPage = new ScanCardPage(this);
 
-
     while(ui->stackedWidget->count() > 0) { //QStackedWidget'ı temizle (varsayılan sayfalar varsa)
         QWidget* widget = ui->stackedWidget->widget(0);
         ui->stackedWidget->removeWidget(widget);
@@ -31,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(soundPage);
     ui->stackedWidget->addWidget(tsPage);
     ui->stackedWidget->addWidget(cardPage);
+
 //-----------------ALT SEKMELER-------------------
     connect(mainPage, &MainPage::openQrScanner, this, [=]() { //Ana sayfadaki butona basılınca QR sayfasına (index 1) geç
         qrPage->qrUI();

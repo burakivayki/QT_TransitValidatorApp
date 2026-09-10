@@ -35,42 +35,39 @@ public:
 
     enum class PacketCommandType {
         GetInfo,
+        RfReset,
+        RfOnOff,
+        RfIsPresent,
+        RfPoll,
+    };
+    enum class ScopeType {
+        Do,
+        Set,
+        Get,
+        Nak,
     };
 
     void cardPageUI();
 
 signals:
-
     void returnToMainPage();
 
 private slots:
-
     void on_exitButton_clicked();
-
     void readSerialData();
-
     void on_refreshBut_clicked();
-
     void appendToTerminal(const QString &message);
-
     void on_getInfBut_clicked();
+    void on_rfResetBut_clicked();
 
 private:
-
     Ui::ScanCardPage*ui;
-
     QSerialPort*serialPort;
-
     QByteArray buffer;
-
     QByteArray rec_buffer;
-
     SerialProcessor *processor;
-
     QByteArray currentPacketToSend;
-
-    void buildAndSendPacket(PacketCommandType cmdType);
-
+    void buildAndSendPacket( ScopeType Scope, PacketCommandType cmdType);
 };
 
 #endif//SCANCARDPAGE_H

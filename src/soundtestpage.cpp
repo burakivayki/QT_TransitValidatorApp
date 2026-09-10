@@ -24,7 +24,6 @@ void SoundTestPage::soundTestUI(){
     ui->formatLabel->setText("The audio format you want to try: ");
     ui->radioButton->setText(".mp3");
     ui->radioButton2->setText(".wav");
-
 }
 
 SoundTestPage::SoundTestPage(QWidget *parent) :
@@ -104,12 +103,10 @@ void SoundTestPage::on_radioButton_clicked()
     ui->soundStart->setEnabled(true);
 }
 
-
 void SoundTestPage::on_radioButton2_clicked()
 {
     ui->soundStart->setEnabled(true);
 }
-
 
 void SoundTestPage::on_yesBut_clicked()
 {
@@ -121,7 +118,6 @@ void SoundTestPage::on_yesBut_clicked()
     ui->radioButton2->setDisabled(true);
 }
 
-
 void SoundTestPage::on_noBut_clicked()
 {
     emit noClicked();
@@ -132,11 +128,9 @@ void SoundTestPage::on_noBut_clicked()
     ui->radioButton2->setDisabled(true);
 }
 
-
 void SoundTestPage::on_velocitySlider_valueChanged(int value)
 {
     ui->velocityLabel->setText("Sound Level: " + QString::number(value));
     QString command = "amixer sset PCM " + QString::number(value) + "% &";  //PCM ses kanalına müdahele | % ->standart yüzdelik | &-> arka planda çalışabilirlik
         system(command.toStdString().c_str());
 }
-

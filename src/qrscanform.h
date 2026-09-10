@@ -26,7 +26,6 @@ signals:
 
 private slots:
     void readQrData();
-
     void on_exitButton_clicked();
 
 private:

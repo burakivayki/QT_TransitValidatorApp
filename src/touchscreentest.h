@@ -16,25 +16,20 @@ class TouchScreenTest : public QWidget
 public:
     explicit TouchScreenTest(QWidget *parent = nullptr);
     ~TouchScreenTest();
-
     void tScreenUI();
-
 
 signals:
     void returnToMainPage();
 
 private slots:
     void on_exitButton_clicked();
-
     void startTouchTest();
 
     void handleTouchButtons();
 
 private:
     Ui::TouchScreenTest *ui;
-
     QList<QPushButton*> touchButtons;
-
     int currentStep;
 };
 
