@@ -1,4 +1,5 @@
 #include "serialprocessor.h"
+#include <QDateTime>
 
 SerialProcessor::SerialProcessor(QObject *parent) : QObject(parent){
 }
@@ -109,12 +110,29 @@ QString SerialProcessor::decodeDataField(const QByteArray &dataField){
 
     int index = 0;
 
-    if (static_cast<quint8>(dataField[index]) == 0xFF && static_cast<quint8>(dataField[index+1]) == 0x01) {
-        // index 0: FF, index 1: 01, index 2: 2A (Uzunluk)
-        index += 3;
+    QByteArray responseID = dataField.mid(index, 3);
+    QString responseString;
+
+    if (static_cast<quint8>(responseID[index]) == 0xFF){
+        switch (responseID[index + 1]){
+            case 0x01:
+                responseString = "SUCCESS TEMPLATE";
+            break;
+            case 0x02:
+                responseString = "UNSUPPORTED TEMPLATE";
+            break;
+            case 0x03:
+                responseString = "ERROR TEMPLATE";
+            break;
+        }
+    } else {
+        messageReady("\nUncorrect Response Id\n");
+        return responseID;
     }
 
-    if (index + 2 > dataField.size()) return parsedOutput;
+    index += 3;
+
+    if (index + 2 > dataField.size()) return parsedOutput; //tagın dışına çıkıyor mu diye kontrol
 
     quint16 tag = (static_cast<quint8>(dataField[index]) << 8) | static_cast<quint8>(dataField[index + 1]);
     index += 2;
@@ -125,17 +143,30 @@ QString SerialProcessor::decodeDataField(const QByteArray &dataField){
     switch (tag){
         case 0x0DF0C:{ //getinf -> 4 UID + 4FW + UTC + 27 RFU
             if (dataField.size() - index >= 39){
-                QByteArray uid = dataField.mid(index, 4);
-                quint8 fwMajor = static_cast<quint8>(dataField[index + 4]);
+                QByteArray uid = dataField.mid(index, 4); //.mid bir yeri kesip oradan alt dizi olşturur -> ilk index'ten başlar ve 4 tane byte okuo
+                quint8 fwMajor = static_cast<quint8>(dataField[index + 4]); //uid'den sonra başlamak için 4 sonrası
                 quint8 fwMinor = static_cast<quint8>(dataField[index + 5]);
                 quint8 fwBugfix = static_cast<quint8>(dataField[index + 6]);
                 quint8 fwBuildNo = static_cast<quint8>(dataField[index + 7]);
-                QByteArray utc = dataField.mid(index + 8, 4);
+                QByteArray utcHex = dataField.mid(index + 8, 4); //indexten 8 sonrasından başlar 4 byte keser ve utc diye yeni diziye kopyalar
+                                                              //aslında kesme denmez ama olsun
+                quint64 epochSecs =utcHex.toHex().toLongLong(nullptr, 16);
+                QDateTime dateTime = QDateTime::fromSecsSinceEpoch(epochSecs);
+
+                quint8 responseLen = static_cast<quint8>(responseID[2]);
 
                 parsedOutput += "\n[Parsed DATA - GET INF]\n";
+                parsedOutput += "Response Check: " + responseString + "\n";
+
+                if (static_cast<int>(responseLen) != dataField.size()){
+                    messageReady("\nERROR: Response length error.\n");
+                }
+
                 parsedOutput += "UID: " + uid.toHex(' ').toUpper() + "\n";
-                parsedOutput += QString("FW_VER: %1.%2.%3.%4\n").arg(fwMajor).arg(fwMinor).arg(fwBugfix).arg(fwBuildNo);
-                parsedOutput += "UTC: " + utc.toHex(' ').toUpper() + "\n";
+                parsedOutput += QString("FW_VER: %1.%2.%3.%4\n").arg(fwMajor).arg(fwMinor).arg(fwBugfix).arg(fwBuildNo); //arg hexi tamsayıya da dönüştürür
+                parsedOutput += "UTC HEX: " + utcHex.toHex(' ').toUpper() + "\n";
+                parsedOutput += "Epoch time: " + QString::number(epochSecs) + "\n";
+                parsedOutput += "Date Time: " + dateTime.toString(Qt::ISODate) + "\n";
             } else {
                 parsedOutput += "\n[Error] Hatalı GET INF uzunluğu.\n";
             }
