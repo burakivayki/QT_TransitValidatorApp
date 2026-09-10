@@ -112,6 +112,22 @@ void ScanCardPage::on_rfResetBut_clicked()
     buildAndSendPacket(ScopeType::Do, PacketCommandType::RfReset);
 }
 
+void ScanCardPage::on_rfFieldOnOffBut_clicked()
+{
+    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfOnOff);
+}
+
+void ScanCardPage::on_isCardPresentBut_clicked()
+{
+    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfReset);
+}
+
+void ScanCardPage::on_pollBut_clicked()
+{
+    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfPoll);
+}
+
+
 void ScanCardPage::appendToTerminal(const QString &message){
     ui->terminalBrowser->append(message);
 }
@@ -127,6 +143,11 @@ ScanCardPage::~ScanCardPage(){
     }
     delete ui;
 }
+
+
+
+
+
 
 
 
