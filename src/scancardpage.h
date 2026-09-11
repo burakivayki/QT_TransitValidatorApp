@@ -36,7 +36,8 @@ public:
     enum class PacketCommandType {
         GetInfo,
         RfReset,
-        RfOnOff,
+        RfOn,
+        RfOff,
         RfIsPresent,
         RfPoll,
     };
@@ -48,6 +49,7 @@ public:
     };
 
     void cardPageUI();
+    static QString rfStatus;
 
 signals:
     void returnToMainPage();
@@ -59,6 +61,10 @@ private slots:
     void appendToTerminal(const QString &message);
     void on_getInfBut_clicked();
     void on_rfResetBut_clicked();
+    void on_rfFieldOnBut_clicked();
+    void on_rfFieldOffBut_clicked();
+    void on_isCardPresentBut_clicked();
+    void on_pollBut_clicked();
 
 private:
     Ui::ScanCardPage*ui;
@@ -67,7 +73,7 @@ private:
     QByteArray rec_buffer;
     SerialProcessor *processor;
     QByteArray currentPacketToSend;
-    void buildAndSendPacket( ScopeType Scope, PacketCommandType cmdType);
+    void buildAndSendPacket(ScopeType Scope, PacketCommandType cmdType);
 };
 
 #endif//SCANCARDPAGE_H

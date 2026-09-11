@@ -1,4 +1,5 @@
 #include "serialprocessor.h"
+#include "scancardpage.h"
 #include <QDateTime>
 
 SerialProcessor::SerialProcessor(QObject *parent) : QObject(parent){
@@ -140,7 +141,7 @@ QString SerialProcessor::decodeDataField(const QByteArray &dataField){
     index += 1;
 
     switch (tag){
-        case 0x0DF0C:{ //getinf -> 4 UID + 4FW + UTC + 27 RFU
+        case 0x0DF0C:{ //GET INF
             if (dataField.size() - index >= 39){
                 QByteArray uid = dataField.mid(index, 4); //.mid bir yeri kesip oradan alt dizi olşturur -> ilk index'ten başlar ve 4 tane byte okuo
                 quint8 fwMajor = static_cast<quint8>(dataField[index + 4]); //uid'den sonra başlamak için 4 sonrası
@@ -167,17 +168,53 @@ QString SerialProcessor::decodeDataField(const QByteArray &dataField){
                 parsedOutput += "Epoch time: " + QString::number(epochSecs) + "\n";
                 parsedOutput += "Date Time: " + dateTime.toString(Qt::ISODate) + "\n";
             } else {
-                parsedOutput += "\n[Error] Hatalı GET INF uzunluğu.\n";
+                parsedOutput += "\n[Error] WRONG GET INF LENGTH.\n";
             }
             break;
         }
-    default:
-        parsedOutput += QString("\n[Unknown TAG] %1\n").arg(tag, 4, 16, QChar('0')).toUpper();
-        break;
+        case 0x0DF18: { //RF FIELD RESET
+            parsedOutput += "\n[Parsed DATA - RF FIELD RESET]\n";
+            parsedOutput += "Response Check: " + responseString + "\n";
+            parsedOutput += "Status: SUCCESS (RF Field reset completed)\n";
+            break;
+        }
+        case 0x0DF06: { //RF FIELD ON-OFF
+            parsedOutput += "\n[Parsed DATA - RF FIELD ON-OFF]\n";
+            parsedOutput += "Response Check: " + responseString + "\n";
+            parsedOutput += "Current RF Field status: " + ScanCardPage::rfStatus;
+            break;
+        }
+        case 0x0DF1B: { //CHECK IF CARD PRESENT OR REMOVED
+            parsedOutput += "\n[Parsed DATA - CHECK IF CARD PRESENT OR REMOVED]\n";
+            parsedOutput += "Response Check: " + responseString + "\n";
+
+            if (dataField.size() - index >= 1) {
+                quint8 cardStatus = static_cast<quint8>(dataField[index]);
+
+                if (cardStatus == 0x01) {
+                    parsedOutput += "Status: Card still present (0x01)\n";
+                } else if (cardStatus == 0x00) {
+                    parsedOutput += "Status: Card absent (removed) (0x00)\n";
+                } else {
+                    parsedOutput += "Status: Unknown (0x" + QString::number(cardStatus, 16).toUpper().rightJustified(2, '0') + ")\n";
+                }
+            } else {
+                parsedOutput += "\n[Error] Hatalı CHECK IF CARD PRESENT OR REMOVED uzunluğu.\n";
+            }
+            break;
+        }
+        case 0x0DF7F: {
+            parsedOutput += "\n[Parsed DATA - POLL A PICC]\n";
+            parsedOutput += "Response Check: " + responseString + "\n";
+            parsedOutput += "Status: SUCCESS (Polling completed)\n";
+            break;
+        }
+        default:
+            parsedOutput += QString("\n[Unknown TAG] %1\n").arg(tag, 4, 16, QChar('0')).toUpper();
+            break;
     }
     return parsedOutput;
 }
-
 
 void SerialProcessor::sendMessage(quint32 packetLength, int lenSize, quint8 stx, quint8 pcb, quint8 ins, quint8 calcLRC, quint8 receivedLRC, quint8 etx, QByteArray dataField) {
     bool isValid = true;

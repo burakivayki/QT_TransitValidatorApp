@@ -8,6 +8,8 @@
 #include <QStringList>
 #include <QDebug>
 
+QString ScanCardPage::rfStatus = "Unknown";
+
 void ScanCardPage::cardPageUI(){
     this->setWindowTitle("ScanCard");
     ui->pageInfo->setText(this->windowTitle());
@@ -15,7 +17,8 @@ void ScanCardPage::cardPageUI(){
     ui->exitButton->setText("Return to the main page");
     ui->getInfBut->setText("GetInf Command");
     ui->rfResetBut->setText("RF Field Reset");
-    ui->rfFieldOnOffBut->setText("RF Field On/Off");
+    ui->rfFieldOnBut->setText("RF Field On");
+    ui->rfFieldOffBut->setText("RF Field Off");
     ui->isCardPresentBut->setText("RF Field Is Card Present");
     ui->pollBut->setText("RF Field Poll A Picc");
     ui->refreshBut->setText("Refresh the terminal");
@@ -64,9 +67,10 @@ void ScanCardPage::buildAndSendPacket(ScopeType scope, PacketCommandType cmdType
     switch(cmdType){
         case PacketCommandType::GetInfo: tag = 0xDF0C; break;
         case PacketCommandType::RfReset: tag = 0xDF18; value.append(static_cast<quint8>(0x04)); break;
-        case PacketCommandType::RfOnOff: tag = 0xDF06; break;
-        case PacketCommandType::RfIsPresent : tag = 0xDF1B; break;
-        case PacketCommandType::RfPoll :
+        case PacketCommandType::RfOn: tag = 0xDF06; value.append(static_cast<quint8>(0x01)); break;
+        case PacketCommandType::RfOff: tag = 0xDF06; value.append(static_cast<quint8>(0x00)); break;
+        case PacketCommandType::RfIsPresent: tag = 0xDF1B; value.append(static_cast<quint8>(0x00)); value.append(static_cast<quint8>(0x00)); break;
+        case PacketCommandType::RfPoll: 0xDF7F; break;
         /*
         tag = 0xDF7F;
             if (len == 0) {
@@ -76,6 +80,12 @@ void ScanCardPage::buildAndSendPacket(ScopeType scope, PacketCommandType cmdType
             }
         */
         break;
+    }
+
+    if (cmdType == PacketCommandType::RfOn){
+        rfStatus = "On";
+    } else if (cmdType == PacketCommandType::RfOff){
+        rfStatus = "Off";
     }
 
     quint8 len = static_cast<quint8>(value.size());
@@ -112,21 +122,25 @@ void ScanCardPage::on_rfResetBut_clicked()
     buildAndSendPacket(ScopeType::Do, PacketCommandType::RfReset);
 }
 
-void ScanCardPage::on_rfFieldOnOffBut_clicked()
+void ScanCardPage::on_rfFieldOnBut_clicked()
 {
-    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfOnOff);
+    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfOn);
+}
+
+void ScanCardPage::on_rfFieldOffBut_clicked()
+{
+    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfOff);
 }
 
 void ScanCardPage::on_isCardPresentBut_clicked()
 {
-    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfReset);
+    buildAndSendPacket(ScopeType::Do, PacketCommandType::RfIsPresent);
 }
 
 void ScanCardPage::on_pollBut_clicked()
 {
     buildAndSendPacket(ScopeType::Do, PacketCommandType::RfPoll);
 }
-
 
 void ScanCardPage::appendToTerminal(const QString &message){
     ui->terminalBrowser->append(message);
